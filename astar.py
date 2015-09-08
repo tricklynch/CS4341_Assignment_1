@@ -12,7 +12,7 @@ def output():
 
 def main():
 	newWorld = world.World("world0.txt")
-	print newWorld
+	print(newWorld)
 
 if __name__ == "__main__":
     main()

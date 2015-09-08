@@ -6,8 +6,8 @@ class World:
         self.rows = []
         self.load(filepath)
 
-	def __str__(self):
-		return str(self.rows)
+    def __str__(self):
+        return str(self.rows)
 
     def load(self, filename):
         ''' Parses the world file from the given filename'''
