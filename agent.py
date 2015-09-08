@@ -49,9 +49,16 @@ class Agent:
 
     # Find an admissable heuristic that dominates #4. A small tweak of #4 will
     # work here.
+    # If the robot is not in the same row or column as the goal, it will need
+    # to turn with a cost of at least 1. 
     def heuristic_5(self, world):
-        pass
-
+        x_diff = abs(self.pos[0] - world.goal[0])
+        y_diff = abs(self.pos[1] - world.goal[1])
+        heuristic = x_diff + y_diff
+        if x_diff == 0 or y_diff == 0:
+            return heuristic
+        return heuristic + 1
+    
     # Create a non-admissable heuristic by multiplying #5 by 3. See the lecture
     # notes on heuristics for why we might want to do such a thing.
     def heuristic_6(self, world):
