@@ -1,3 +1,5 @@
+#!/usr/local/bin/python2.7
+
 class World:
     '''The world structure is a class that is used to represent '''
     def __init__(self, filepath):
