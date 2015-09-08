@@ -2,6 +2,7 @@
 
 import sys
 
+
 class Agent:
     # start_pos is a tuple for the initial x, y coordinates of the agent
     # heuristic_number is a number referring to the heuristics outlined in the

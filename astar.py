@@ -1,6 +1,8 @@
 #!/usr/local/bin/python2.7
 
-import sys, world
+import sys
+import world
+
 
 def output():
     # The score of the path found
@@ -10,9 +12,10 @@ def output():
     #   ...) taken to get to the goal, with each action separated by a newline
     pass
 
+
 def main():
-	newWorld = world.World("world0.txt")
-	print(newWorld)
+    newWorld = world.World("world0.txt")
+    print newWorld
 
 if __name__ == "__main__":
     main()

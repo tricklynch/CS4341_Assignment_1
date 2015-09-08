@@ -2,6 +2,7 @@
 
 class World:
     '''The world structure is a class that is used to represent '''
+
     def __init__(self, filepath):
         self.start = ()
         self.goal = ()
@@ -15,7 +16,7 @@ class World:
         ''' Parses the world file from the given filename'''
         world_file = self._read_world_file(filename)
 
-        #Parse through the rows file
+        # Parse through the rows file
         for y, world_row in enumerate(world_file):
             row = []
             for x, world_element in enumerate(world_row.split("\t")):
@@ -24,8 +25,8 @@ class World:
                     complexity = int(strippedVal)
                     row.append(complexity)
                 except ValueError as err:
-                    #This exception is caught if we try to parse a non integer ValueError
-                    #This happens when we parse the Goal or start location.
+                    # This exception is caught if we try to parse a non integer ValueError
+                    # This happens when we parse the Goal or start location.
                     row.append(1)
                     if strippedVal == "G":
                         self.goal = (x, y)
