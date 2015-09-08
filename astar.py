@@ -2,6 +2,7 @@
 
 import sys
 import world
+import agent
 
 
 def output():
@@ -15,6 +16,7 @@ def output():
 
 def main():
     newWorld = world.World("world0.txt")
+    newAgent = agent.Agent(newWorld.start, 20)
     print newWorld
 
 if __name__ == "__main__":
