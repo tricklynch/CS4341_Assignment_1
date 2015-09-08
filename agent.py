@@ -2,10 +2,12 @@
 
 import sys
 
+
 class Agent:
     # start_pos is a tuple for the initial x, y coordinates of the agent
     # heuristic_number is a number referring to the heuristics outlined in the
     #   project description which is in range(6)
+
     def __init__(self, start_pos, heuristic_number):
         self.pos = start_pos
         # heuristic is a string that should be the name of a function in the
