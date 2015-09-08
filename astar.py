@@ -19,3 +19,19 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+ 
+
+class Astar:
+    def __init__(self, agent, world):
+        self.agent = agent
+        self.world = world
+        self.score = 0
+        self.actionNum = 0
+        self.nodeNum = 0
+        self.actionList= []
+        
+        def astar(self):
+            closedSet = []
+            
+            cameFrom = []
