@@ -1,6 +1,5 @@
 #!/usr/local/bin/python2.7
-from operator import sub, add
-
+from cell import Cell
 
 class World:
     '''The world structure is a class that is used to represent '''
@@ -15,7 +14,7 @@ class World:
         self.agent = agent
 
     def __str__(self):
-        return str(self.rows)
+        return "\n".join(str(row) for row in self.rows)
 
     def width(self):
         '''Returns the width of the board '''
@@ -39,25 +38,11 @@ class World:
             return True
         return False
 
-    def get_cell_complexity(self, pos):
+    def get_cell(self, pos):
         ''' Returns the complexity of the cell at the given position tuple '''
         pos_x = pos[0]
         pos_y = pos[1]
-        return self.rows[pos_x][pos_y]
-
-    def _add_positions(self, pos, other):
-        '''
-        A helper function that adds two positions together and returns the result.
-        For example, given (1,1) and (1,0), (2,1) will be returned.
-        '''
-        return tuple(map(add, pos, other))
-
-    def _sub_positions(self, pos, other):
-        '''
-        A helper function that subtracts two positions together and returns the result.
-        For example, given (1,1) and (1,0), (0,1) will be returned.
-        '''
-        return tuple(map(sub, pos, other))
+        return int(self.rows[pos_x][pos_y])
 
     def get_adjacent_cells(self, pos):
         ''' Returns all cells adjacent to the given position tuple. Diagonals are not considered adjacent. '''
@@ -79,7 +64,7 @@ class World:
         '''
         result = []
         for offset in offsets:
-            cell = self._add_positions(pos, offset)
+            cell = Cell.add_positions(pos, offset)
             if self.pos_off_board(cell):
                 continue
             result.append(cell)
@@ -94,19 +79,12 @@ class World:
             row = []
             for x, world_element in enumerate(world_row.split("\t")):
                 strippedVal = world_element.rstrip("\n")
-                try:
-                    complexity = int(strippedVal)
-                    row.append(complexity)
-                except ValueError as err:
-                    # This exception is caught if we try to parse a non integer ValueError
-                    # This happens when we parse the Goal or start location.
-                    row.append(1)
-                    if strippedVal == "G":
-                        self.goal = (x, y)
-                    elif strippedVal == "S":
-                        self.start = (x, y)
-                    else:
-                        print "ERROR: Read an invalid character in the world file: {0}".format(strippedVal)
+                newCell = Cell(strippedVal)
+                if newCell.is_goal:
+                    self.goal = (x, y)
+                if newCell.is_start:
+                    self.start = (x, y)
+                row.append(newCell)
             self.rows.append(row)
 
     def _read_world_file(self, filename):

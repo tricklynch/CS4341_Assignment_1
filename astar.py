@@ -15,7 +15,7 @@ class AStar:
         self.nodeNum = 0
         self.actionList = []
         self.cameFrom = []
-        self.openSet = []
+        self.openSet = [self.world.start]
         heapq.heapify(self.openSet)
         self.closedSet = []
 
@@ -37,7 +37,7 @@ class AStar:
 
 def main():
     newAgent = agent.Agent(5)
-    newWorld = world.World("world0.txt", newAgent)
+    newWorld = world.World("test1.world.txt", newAgent)
     astar = AStar(newAgent, newWorld)
     astar.start()
 
