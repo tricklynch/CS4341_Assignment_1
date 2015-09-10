@@ -1,14 +1,9 @@
 #!/usr/local/bin/python2.7
 
 import sys
+from direction import Direction
 
 class Agent:
-    # The 4 directions that the agent may face
-    NORTH = (0, -1)
-    EAST = (1, 0)
-    SOUTH = (0, 1)
-    WEST = (-1, 0)
-
     # start_pos is a tuple for the initial x, y coordinates of the agent
     # heuristic_number is a number referring to the heuristics outlined in the
     # project description which is in range(1, 7)
@@ -27,7 +22,7 @@ class Agent:
             sys.exit(1)
 
         self.pos = ()
-        self.dir = NORTH
+        self.dir = Direction()
 
     # A heuristic of 0. A solution for a relaxed problem where the robot can
     # teleport to the goal. This value also provides a baseline of how
@@ -93,32 +88,10 @@ class Agent:
     # the numeric value of the square currently occupied (rounded up).
     def turn(self, world, direction):
         if direction is "right":
-            if self.dir is NORTH:
-                self.dir = EAST
-            elif self.dir is EAST:
-                self.dir = SOUTH
-            elif self.dir is SOUTH:
-                self.dir = WEST
-            elif self.dir is WEST:
-                self.dir = NORTH
-            else:
-                # Maybe throw some exception or something later
-                pass
+            self.dir.turnRight()
         elif direction is "left":
-            if self.dir is NORTH:
-                self.dir = WEST
-            elif self.dir is EAST:
-                self.dir = NORTH
-            elif self.dir is SOUTH:
-                self.dir = EAST
-            elif self.dir is WEST:
-                self.dir = SOUTH
-            else:
-                # Maybe throw some exception or something later
-                pass
-        else:
-            # Maybe throw some exception or something later
-            pass
+            self.dir.turnLeft()
+
 
     # The robot uses high-powered explosives to simplify the task. The
     # explosives clear all 8 of the adjacent squares (excluding the square
