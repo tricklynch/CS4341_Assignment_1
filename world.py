@@ -1,5 +1,6 @@
 #!/usr/local/bin/python2.7
 from cell import Cell
+import sys
 
 class World:
     '''The world structure is a class that is used to represent '''
@@ -32,17 +33,22 @@ class World:
         ''' Returns True if the position is off of the board, or false otherwise '''
         pos_x = pos[0]
         pos_y = pos[1]
-        if pos_x < 0 or pos_x > self.width:
+        if pos_x < 0 or pos_x >= self.width():
             return True
-        if pos_y < 0 or pos_y > self.length:
+        if pos_y < 0 or pos_y >= self.length():
             return True
         return False
 
     def get_cell(self, pos):
         ''' Returns the complexity of the cell at the given position tuple '''
-        pos_x = pos[0]
-        pos_y = pos[1]
-        return int(self.rows[pos_x][pos_y])
+        try:
+            pos_x = pos[0]
+            pos_y = pos[1]
+            return int(self.rows[pos_y][pos_x])
+        except IndexError as err:
+            print "ERROR getting cell {0}: {1}".format(pos, err)
+            print self
+            sys.exit(1)
 
     def get_adjacent_cells(self, pos):
         ''' Returns all cells adjacent to the given position tuple. Diagonals are not considered adjacent. '''
@@ -65,7 +71,7 @@ class World:
         result = []
         for offset in offsets:
             cell = Cell.add_positions(pos, offset)
-            if self.pos_off_board(cell):
+            if self.pos_off_board(cell) == True:
                 continue
             result.append(cell)
         return result

@@ -39,7 +39,7 @@ class Cell:
                 sys.exit(1)
 
     @staticmethod
-    def add_positions(self, pos, other):
+    def add_positions(pos, other):
         '''
         A static utility method that adds two positions together and returns the result.
         For example, given (1,1) and (1,0), (2,1) will be returned.
@@ -47,7 +47,7 @@ class Cell:
         return tuple(map(add, pos, other))
 
     @staticmethod
-    def sub_positions(self, pos, other):
+    def sub_positions(pos, other):
         '''
         A static utility method that subtracts two positions together and returns the result.
         For example, given (1,1) and (1,0), (0,1) will be returned.

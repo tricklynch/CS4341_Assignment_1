@@ -11,78 +11,9 @@ class Agent:
     project description which is in range(1, 7)
     '''
 
-    def __init__(self, heuristic_number):
-        # heuristic is a string that should be the name of a function in the
-        # Agent class
-        try:
-            heuristic = "_heuristic_" + str(heuristic_number)
-            if heuristic_number > 6 or heuristic_number < 1:
-                raise IndexError(
-                    "Your heuristic_number is out of range. Choose between 1 and 6")
-            # heuristic_func is a function to represent the heuristic
-            self.heuristic_func = getattr(self, heuristic)
-        except Exception as err:
-            print str(err)
-            sys.exit(1)
-
+    def __init__(self):
         self.pos = ()
         self.dir = Direction()
-
-    def _heuristic_1(self, world):
-        '''
-        A heuristic of 0. A solution for a relaxed problem where the robot can
-        teleport to the goal. This value also provides a baseline of how
-        uninformed search would perform.
-        '''
-        return 0
-
-    def _heuristic_2(self, world):
-        '''
-        Min(vertical, horizontal). Use whichever difference is smaller. This
-        heuristic should dominate #1.
-        '''
-        x_diff = abs(self.pos[0] - world.goal[0])
-        y_diff = abs(self.pos[1] - world.goal[1])
-        return min(x_diff, y_diff)
-
-    def _heuristic_3(self, world):
-        '''
-        Max(vertical, horizontal). Use whichever difference is larger. This
-        heuristic should dominate #2.
-        '''
-        x_diff = abs(self.pos[0] - world.goal[0])
-        y_diff = abs(self.pos[1] - world.goal[1])
-        return max(x_diff, y_diff)
-
-    def _heuristic_4(self, world):
-        '''
-        Vertical + horizontal. Sum the differences together. This heuristic
-        should dominate #3.
-        '''
-        x_diff = abs(self.pos[0] - world.goal[0])
-        y_diff = abs(self.pos[1] - world.goal[1])
-        return x_diff + y_diff
-
-    def _heuristic_5(self, world):
-        '''
-        Find an admissable heuristic that dominates #4. A small tweak of #4 will
-        work here.
-        If the robot is not in the same row or column as the goal, it will need
-        to turn with a cost of at least 1.
-        '''
-        x_diff = abs(self.pos[0] - world.goal[0])
-        y_diff = abs(self.pos[1] - world.goal[1])
-        heuristic = x_diff + y_diff
-        if x_diff == 0 or y_diff == 0:
-            return heuristic
-        return heuristic + 1
-
-    def _heuristic_6(self, world):
-        '''
-        Create a non-admissable heuristic by multiplying #5 by 3. See the lecture
-        notes on heuristics for why we might want to do such a thing.
-        '''
-        return 3 * heuristic_5(world)
 
     def forward(self, world):
         '''
