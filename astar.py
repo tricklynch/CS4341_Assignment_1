@@ -158,8 +158,11 @@ class AStar:
 
 
 def main():
+    worldFile = "test1.world.txt"
+    if(len(sys.argv) == 2):
+        worldFile = sys.argv[1]
     newAgent = agent.Agent()
-    newWorld = world.World("test1.world.txt", newAgent)
+    newWorld = world.World(worldFile, newAgent)
     astar = AStar(newAgent, newWorld, 5)
     astar.start()
 
