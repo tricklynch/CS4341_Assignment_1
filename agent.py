@@ -2,15 +2,19 @@
 
 import sys
 
-
 class Agent:
+    # The 4 directions that the agent may face
+    NORTH = (0, -1)
+    EAST = (1, 0)
+    SOUTH = (0, 1)
+    WEST = (-1, 0)
+
     # start_pos is a tuple for the initial x, y coordinates of the agent
     # heuristic_number is a number referring to the heuristics outlined in the
-    #   project description which is in range(1, 7)
-
+    # project description which is in range(1, 7)
     def __init__(self, heuristic_number):
         # heuristic is a string that should be the name of a function in the
-        #   Agent class
+        # Agent class
         try:
             heuristic = "_heuristic_" + str(heuristic_number)
             if heuristic_number > 6 or heuristic_number < 1:
@@ -23,6 +27,7 @@ class Agent:
             sys.exit(1)
 
         self.pos = ()
+        self.dir = NORTH
 
     # A heuristic of 0. A solution for a relaxed problem where the robot can
     # teleport to the goal. This value also provides a baseline of how
@@ -67,3 +72,61 @@ class Agent:
     # notes on heuristics for why we might want to do such a thing.
     def _heuristic_6(self, world):
         return 3 * heuristic_5(world)
+
+    # Moves the agent 1 unit forward on the map without changing its facing
+    # direction. Time required: the terrain complexity of the square being
+    # moved into.
+    def forward(self, world):
+        Cell.add_positions(self.pos, self.dir)
+
+    # The robot powers up, and charges forward crashing through obstacles in
+    # its path. The effect is to move the agent 1 unit forward on the map
+    # without changing its facing direction. Time required: 3 (ignores terrain
+    # complexity), and the next action taken by the agent must be Forward.
+    # I.e., the after Bashing, the agent cannot turn, Demolish, or Bash; it
+    # must first move Forward at least once to recover its balance.
+    def bash(self, world):
+        Cell.add_positions(self.pos, self.dir)
+        Cell.add_positions(self.pos, self.dir)
+
+    # Turns the agent 90 degrees, either left or right. Time required: 1/3 of
+    # the numeric value of the square currently occupied (rounded up).
+    def turn(self, world, direction):
+        if direction is "right":
+            if self.dir is NORTH:
+                self.dir = EAST
+            elif self.dir is EAST:
+                self.dir = SOUTH
+            elif self.dir is SOUTH:
+                self.dir = WEST
+            elif self.dir is WEST:
+                self.dir = NORTH
+            else:
+                # Maybe throw some exception or something later
+                pass
+        elif direction is "left":
+            if self.dir is NORTH:
+                self.dir = WEST
+            elif self.dir is EAST:
+                self.dir = NORTH
+            elif self.dir is SOUTH:
+                self.dir = EAST
+            elif self.dir is WEST:
+                self.dir = SOUTH
+            else:
+                # Maybe throw some exception or something later
+                pass
+        else:
+            # Maybe throw some exception or something later
+            pass
+
+    # The robot uses high-powered explosives to simplify the task. The
+    # explosives clear all 8 of the adjacent squares (excluding the square
+    # inhibited by the robot, fortunately) and replaces their terrain
+    # complexity with 3 due to residual rubble. Time required: 4. Note: this
+    # action can increase terrain complexity if the initial complexity of the
+    # square is less than 3. Also note that if the agent considers using
+    # Demolish, but the search backtracks, you must ensure that correct terrain
+    # complexity is restored to the map.
+    def demolish(self, world):
+        pass

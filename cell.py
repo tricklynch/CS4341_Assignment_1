@@ -1,5 +1,6 @@
-from operator import sub, add
+#!/usr/local/bin/python2.7
 
+from operator import sub, add
 
 class Cell:
     '''The Cell class represents a tile on the board'''
