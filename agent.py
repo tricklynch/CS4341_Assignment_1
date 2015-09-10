@@ -2,7 +2,7 @@
 
 import sys
 from direction import Direction
-
+from fsm import FSM
 
 class Agent:
     '''
@@ -14,6 +14,7 @@ class Agent:
     def __init__(self):
         self.pos = ()
         self.dir = Direction()
+        self.fsm = FSM()
 
     def bash(self, pos):
         ''' Returns the cost of bashing over the current position'''
