@@ -15,41 +15,32 @@ class Agent:
         self.pos = ()
         self.dir = Direction()
 
-    def forward(self, world):
-        '''
-        Moves the agent 1 unit forward on the map without changing its facing
-        direction. Time required: the terrain complexity of the square being
-        moved into.
-        '''
-        self.pos = Cell.add_positions(self.pos, self.direction())
+    def bash(self, pos):
+        ''' Returns the cost of bashing over the current position'''
+        offset = self.vector(pos)
+        offset_pos = Cell.add_positions(self.pos, offset)
+        two_offset_pos = Cell.add_positions(offset_pos, offset)
+        bash_cost = 3
+        return bash_cost + self.world.get_cell(two_offset_pos)
 
-    def bash(self, world):
-        '''
-        The robot powers up, and charges forward crashing through obstacles in
-        its path. The effect is to move the agent 1 unit forward on the map
-        without changing its facing direction. Time required: 3 (ignores terrain
-        complexity), and the next action taken by the agent must be Forward.
-        I.e., the after Bashing, the agent cannot turn, Demolish, or Bash; it
-        must first move Forward at least once to recover its balance.
-        '''
-        Cell.add_positions(self.pos, self.dir)
-        Cell.add_positions(self.pos, self.dir)
+    def forward(self, pos):
+        ''' Returns the cost of moving forward to the given position '''
+        forward_position = Cell.add_positions(self.pos, self.direction())
+        return self.world.get_cell(forward_position)
+
+    def turn(self, pos):
+        ''' Cost of turning to face the given position '''
+        single_turn_cost = math.ceil(self.world.get_cell(self.pos) / 3)
+        turns_needed = self.dir.count_turns_needed(pos)
+        return single_turn_cost * turns_needed
+
+    def vector(self, other):
+        ''' Returns the offset of a point compared to the agent's position '''
+        return Cell.sub_positions(other, self.pos)
 
     def direction(self):
         ''' Returns the direction of the agent '''
         return self.dir.direction()
-
-    def turn(self, world, direction):
-        '''
-        Turns the agent 90 degrees, either left or right. Time required: 1/3 of
-        the numeric value of the square currently occupied (rounded up).
-        '''
-        if direction is "right":
-            self.dir.turnRight()
-            return self.direction()
-        elif direction is "left":
-            self.dir.turnLeft()
-            return self.direction()
 
     def demolish(self, world):
         '''
@@ -62,4 +53,4 @@ class Agent:
         Demolish, but the search backtracks, you must ensure that correct terrain
         complexity is restored to the map.
         '''
-        pass
+        return 0

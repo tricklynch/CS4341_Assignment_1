@@ -6,8 +6,13 @@ class Direction():
     WEST = (-1, 0)
 
     def __init__(self):
-        self.index = 0
-        self._dirs = [self.NORTH, self.EAST, self.SOUTH, self.WEST]
+        self.index = 1
+        self._dirs = [self.WEST, self.NORTH, self.EAST, self.SOUTH]
+
+    def count_turns_needed(self, otherdir):
+        ''' Returns the number of turns needed to face the given other direction '''
+        dist = abs(self._dirs.index(otherdir) - self.index)
+        return 2 if dist >= 3 else dist
 
     def __getitem__(self, val):
         return self._dirs[val % len(self._dirs)]

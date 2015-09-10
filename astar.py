@@ -5,7 +5,6 @@ import world
 import agent
 from Queue import PriorityQueue
 
-
 class Heuristic:
 
     def __init__(self, heuristic_num):
