@@ -14,6 +14,10 @@ class Cell:
         return self.complexity
 
     def __repr__(self):
+        if self.is_start:
+            return "S"
+        elif self.is_goal:
+            return "G"
         return str(self.complexity)
 
     def set_complexity(self, complexity):
