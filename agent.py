@@ -4,6 +4,7 @@ import sys
 from direction import Direction
 from fsm import FSM
 
+
 class Agent:
     '''
     Represents the agent acting on the environment.
@@ -15,6 +16,7 @@ class Agent:
         self.pos = pos
         self.dir = direction
         self.heuristic_num = heuristic_num
+        self.fsm = FSM(0)
 
     def estimate(self, end):
         ''' Estimate is a method that runs the appropriate heuristic '''
