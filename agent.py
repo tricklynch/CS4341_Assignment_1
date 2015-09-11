@@ -143,7 +143,7 @@ class Agent:
         Create a non - admissable heuristic by multiplying  # 5 by 3. See the lecture
         notes on heuristics for why we might want to do such a thing.
         '''
-        return 3 * heuristic_5(end)
+        return 3 * self._heuristic_5(end)
 
     def bash(self, pos):
         ''' Returns the cost of bashing over the current position'''
