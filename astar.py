@@ -9,13 +9,14 @@ class AStar:
 
     def __init__(self, world, heuristic_num):
         self.world = world
-        self.dir = Direction()
 
         self.heuristic_num = heuristic_num
 
         # Total cost to get to a given node
         self.cost_so_far = {}
         self.cost_so_far[self.world.start] = 0
+        self.facing = {}
+        self.facing[self.world.start] = Direction()
 
         # Openset is a priorityQueue where best options are first
         self.open_set = CellQueue()
@@ -46,10 +47,11 @@ class AStar:
             # For each adjacent cell
             for next in self.world.get_adjacent_cells(current):
                 # Tally total cost
-                evaluator = Agent(next, self.dir, self.heuristic_num, 0, self.world)
+                evaluator = Agent(current, self.facing[current], self.heuristic_num, 0, self.world)
                 new_cost = self.cost_so_far[current] \
-                    + self.world.get_cell(next) + evaluator.turn(current)
-
+                    + self.world.get_cell(next) + evaluator.turn(next)
+                new_dir = Direction().set_dir(Direction.vector(current, next))
+                
                 # Consider the adjacent node, 'next'...
                 if next not in self.cost_so_far or new_cost < self.cost_so_far[next]:
                     # TODO: Replace the 0 with a variable. This is the state of
@@ -60,8 +62,8 @@ class AStar:
                     priority = new_cost + \
                         evaluator.estimate(self.world.goal)
                     self.open_set.put(next, priority)
+                    self.facing[next] = new_dir
                     self.came_from[next] = current
-                    evaluator.dir.set_dir(evaluator.vector(current))
         self.trace_path()
 
     def draw_solution(self, path, costs):
@@ -82,7 +84,7 @@ class AStar:
         print "Path\tCost"
         for x in range(len(path)):
             print "{0}\t{1}".format(path[x], costs[x])
-        
+
 
     def trace_path(self):
         '''Using the came_from dictionary, reconstruct the correct path to the goal '''
@@ -109,4 +111,3 @@ class AStar:
         
 
         self.draw_solution(path, costs)
-

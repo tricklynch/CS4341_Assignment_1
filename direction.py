@@ -1,3 +1,5 @@
+from cell import Cell
+
 class Direction():
     ''' The direction class is used to keep track of the agent's Forward position '''
     NORTH = (0, -1)
@@ -28,7 +30,12 @@ class Direction():
     def direction(self):
         return self._dirs[self.index]
 
+    @staticmethod
+    def vector(first, other):
+        ''' Returns the offset of a point compared to the agent's position '''
+        return Cell.sub_positions(other, first)
+
     def set_dir(self, other_dir):
         if other_dir in self._dirs:
             self.index = self._dirs.index(other_dir)
-        
+        return self

@@ -1,6 +1,7 @@
 #!/usr/local/bin/python2.7
 
 from operator import sub, add
+import sys
 
 class Cell:
     '''The Cell class represents a tile on the board'''
@@ -39,7 +40,7 @@ class Cell:
                 self.complexity = 1
                 self.is_start = True
             else:
-                print "ERROR: Read an invalid character in the world file: {0}".format(strippedVal)
+                print "ERROR: Read an invalid character in the world file: {0}".format(complexity)
                 sys.exit(1)
 
     @staticmethod

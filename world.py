@@ -14,7 +14,7 @@ class World:
             self.gen_rand_world(height, width)
         else:
             self.load(filepath)
-        
+
 
     def __str__(self):
         return "\n".join(str(row) for row in self.rows)
