@@ -46,20 +46,22 @@ class AStar:
             # For each adjacent cell
             for next in self.world.get_adjacent_cells(current):
                 # Tally total cost
+                evaluator = Agent(next, self.dir, self.heuristic_num, 0, self.world)
                 new_cost = self.cost_so_far[current] \
-                    + self.world.get_cell(next)
+                    + self.world.get_cell(next) + evaluator.turn(current)
+
                 # Consider the adjacent node, 'next'...
                 if next not in self.cost_so_far or new_cost < self.cost_so_far[next]:
                     # TODO: Replace the 0 with a variable. This is the state of
                     # the agent at the time of evaluation. The state is
                     # dependant on the previous moves and at this time I am not
                     # certain how to determine that.
-                    evaluator = Agent(next, self.dir, self.heuristic_num, 0)
                     self.cost_so_far[next] = new_cost
                     priority = new_cost + \
                         evaluator.estimate(self.world.goal)
                     self.open_set.put(next, priority)
                     self.came_from[next] = current
+		    evaluator.dir.set_dir(evaluator.vector(current))
         self.trace_path()
 
     def draw_solution(self, path):
@@ -85,5 +87,6 @@ class AStar:
         while current != self.world.start:
             current = self.came_from[current]
             path.append(current)
+	    path.append(self.cost_so_far[current])
         path.reverse()
         self.draw_solution(path)

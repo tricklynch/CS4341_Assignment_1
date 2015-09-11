@@ -1,6 +1,8 @@
 #!/usr/local/bin/python2.7
 
 import sys
+import math
+from cell import Cell
 from direction import Direction
 from fsm import FSM
 
@@ -12,11 +14,12 @@ class Agent:
     project description which is in range(1, 7)
     '''
 
-    def __init__(self, pos, direction, heuristic_num, state):
+    def __init__(self, pos, direction, heuristic_num, state, world):
         self.pos = pos
         self.dir = direction
         self.heuristic_num = heuristic_num
         self.fsm = FSM(state)
+	self.world = world
 
     def estimate(self, end):
         ''' Estimate is a method that runs the appropriate heuristic '''
@@ -161,7 +164,8 @@ class Agent:
     def turn(self, pos):
         ''' Cost of turning to face the given position '''
         single_turn_cost = math.ceil(self.world.get_cell(self.pos) / 3)
-        turns_needed = self.dir.count_turns_needed(pos)
+	other_dir = self.vector(pos)
+        turns_needed = self.dir.count_turns_needed(other_dir)
         return single_turn_cost * turns_needed
 
     def vector(self, other):

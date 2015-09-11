@@ -27,3 +27,8 @@ class Direction():
 
     def direction(self):
         return self._dirs[self.index]
+
+    def set_dir(self, other_dir):
+        if other_dir in self._dirs:
+	    self.index = self._dirs.index(other_dir)
+		
