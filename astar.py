@@ -3,7 +3,7 @@
 import sys
 import world
 from agent import Agent
-from Queue import PriorityQueue
+from queue import CellQueue
 from direction import Direction
 
 class AStar:
@@ -19,7 +19,7 @@ class AStar:
         self.cost_so_far[self.world.start] = 0
 
         # Openset is a priorityQueue where best options are first
-        self.open_set = PriorityQueue()
+        self.open_set = CellQueue()
         self.open_set.put(self.world.start, 0)
 
         # cameFrom is a dictionary of the traversed path
@@ -38,6 +38,7 @@ class AStar:
         ''' Start the A star algorithm '''
         while not self.open_set.empty():
             current = self.open_set.get()
+            print "Expanding node {0}".format(current)
 
             # If we reached the goal, stop
             if current == self.world.goal:
@@ -86,7 +87,7 @@ class AStar:
 
 
 def main():
-    worldFile = "test1.world.txt"
+    worldFile = "test3.world.txt"
     if(len(sys.argv) == 2):
         worldFile = sys.argv[1]
     newWorld = world.World(worldFile)
