@@ -26,7 +26,7 @@ def main():
         newWorld = World(height=args.size, width=args.size)
     else:
         newWorld = World(height=10, width=10)
-    astar = AStar(newWorld, 5)
+    astar = AStar(newWorld, args.heuristic)
     astar.start()
 
 if __name__ == "__main__":
