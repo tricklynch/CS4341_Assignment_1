@@ -40,16 +40,20 @@ class Agent:
     def _moves_from_state(self):
         state = self.fsm.current_state
         if state is 0:
-            return [forward, bash, turn]
+            moves = ["forward", "bash", "turn"]
         elif state is 1:
-            return [forward]
+            moves = ["forward"]
         elif states is 2:
-            return [forward, bash, turn]
+            moves = ["forward", "bash", "turn"]
         elif states is 3:
-            return [forward, bash]
+            moves = ["forward", "bash"]
         else:
             # Do some error checking later maybe
             return []
+        moves_functions = []
+        for m in moves:
+            moves_functions.append(getattr(self, m))
+        return moves_functions
 
     # Remove moves that are not possible based on position
     def _sanitize_moves(self, moves):
