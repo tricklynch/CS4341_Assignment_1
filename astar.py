@@ -61,7 +61,7 @@ class AStar:
                         evaluator.estimate(self.world.goal)
                     self.open_set.put(next, priority)
                     self.came_from[next] = current
-		    evaluator.dir.set_dir(evaluator.vector(current))
+                    evaluator.dir.set_dir(evaluator.vector(current))
         self.trace_path()
 
     def draw_solution(self, path):
@@ -87,6 +87,6 @@ class AStar:
         while current != self.world.start:
             current = self.came_from[current]
             path.append(current)
-	    path.append(self.cost_so_far[current])
+            path.append(self.cost_so_far[current])
         path.reverse()
         self.draw_solution(path)

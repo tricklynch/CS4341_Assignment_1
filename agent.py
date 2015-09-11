@@ -19,7 +19,7 @@ class Agent:
         self.dir = direction
         self.heuristic_num = heuristic_num
         self.fsm = FSM(state)
-	self.world = world
+        self.world = world
 
     def estimate(self, end):
         ''' Estimate is a method that runs the appropriate heuristic '''
@@ -164,7 +164,7 @@ class Agent:
     def turn(self, pos):
         ''' Cost of turning to face the given position '''
         single_turn_cost = math.ceil(self.world.get_cell(self.pos) / 3)
-	other_dir = self.vector(pos)
+        other_dir = self.vector(pos)
         turns_needed = self.dir.count_turns_needed(other_dir)
         return single_turn_cost * turns_needed
 
