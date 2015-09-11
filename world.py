@@ -63,6 +63,11 @@ class World:
                                (-1, 1), (1, 1), (1, -1), (-1, -1)]
         return self._get_cells_from_offsets(pos, surrounding_offsets)
 
+    def get_bashable_cells(self, pos):
+        ''' Returns cells that can be bashed into '''
+        bash_offsets = [(-2,0), (0,2), (2,0), (0,-2)]
+        return self._get_cells_from_offsets(pos, bash_offsets)
+
     def _get_cells_from_offsets(self, pos, offsets):
         '''
         A helper function that is used to retrieve the coordinates of the cells

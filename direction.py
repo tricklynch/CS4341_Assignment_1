@@ -1,4 +1,6 @@
 from cell import Cell
+from operator import div
+import math
 
 class Direction():
     ''' The direction class is used to keep track of the agent's Forward position '''
@@ -11,9 +13,14 @@ class Direction():
         self.index = index
         self._dirs = [self.WEST, self.NORTH, self.EAST, self.SOUTH]
 
-    def count_turns_needed(self, otherdir):
+
+    def count_turns_needed(self, from_pos, to_pos):
         ''' Returns the number of turns needed to face the given other direction '''
-        dist = abs(self._dirs.index(otherdir) - self.index)
+        offset = Cell.sub_positions(to_pos, from_pos)
+        abs_offset = map(abs,offset)
+        max_val = max(abs_offset)
+        vector = tuple(map(div,offset,(max_val,max_val)))
+        dist = abs(self._dirs.index(vector) - self.index)
         return 2 if dist >= 3 else dist
 
     def __getitem__(self, val):

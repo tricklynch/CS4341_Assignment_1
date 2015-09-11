@@ -44,26 +44,42 @@ class AStar:
             if current == self.world.goal:
                 break
 
-            # For each adjacent cell
+            evaluator = Agent(current, self.facing[current], self.heuristic_num, self.world)
             for next in self.world.get_adjacent_cells(current):
                 # Tally total cost
-                evaluator = Agent(current, self.facing[current], self.heuristic_num, 0, self.world)
-                new_cost = self.cost_so_far[current] \
-                    + self.world.get_cell(next) + evaluator.turn(next)
-                new_dir = Direction().set_dir(Direction.vector(current, next))
-                
+                g_score = self.cost_so_far[current] \
+                    + evaluator.forward(next) + evaluator.turn(next)
+
                 # Consider the adjacent node, 'next'...
-                if next not in self.cost_so_far or new_cost < self.cost_so_far[next]:
-                    # TODO: Replace the 0 with a variable. This is the state of
-                    # the agent at the time of evaluation. The state is
-                    # dependant on the previous moves and at this time I am not
-                    # certain how to determine that.
-                    self.cost_so_far[next] = new_cost
-                    priority = new_cost + \
-                        evaluator.estimate(self.world.goal)
-                    self.open_set.put(next, priority)
+                if next not in self.cost_so_far or g_score < self.cost_so_far[next]:
+                    self.cost_so_far[next] = g_score
+                    h_score = evaluator.estimate(next, self.world.goal)
+                    f_score = g_score + h_score
+
+                    #Add the node to the priority queue
+                    self.open_set.put(next, f_score)
+                    #Save the direction the node is facing
+                    new_dir = Direction().set_dir(Direction.vector(current, next))
                     self.facing[next] = new_dir
+                    #Add the node to the path of traversed nodes
                     self.came_from[next] = current
+
+            for bash_cell in self.world.get_bashable_cells(current):
+                g_score = self.cost_so_far[current] \
+                    + evaluator.bash(bash_cell) + evaluator.turn(bash_cell)
+
+                #Consider the bash node, next
+                if bash_cell not in self.cost_so_far or g_score < self.cost_so_far[bash_cell]:
+                    self.cost_so_far[bash_cell] = g_score
+                    h_score = evaluator.estimate(bash_cell, self.world.goal)
+                    f_score = g_score + h_score
+
+                    self.open_set.put(bash_cell, f_score)
+                    new_dir = Direction().set_dir(Direction.vector(current, bash_cell))
+                    self.facing[bash_cell] = new_dir
+                    self.came_from[bash_cell] = current
+
+
         self.trace_path()
 
     def draw_solution(self, path, costs):
@@ -102,8 +118,12 @@ class AStar:
                 costs.append(self.cost_so_far[current])
                 current = self.came_from[current]
                 break
+        path.pop(0)
+        costs.pop(0)
 
         path.reverse()
         costs.reverse()
+
+
 
         self.draw_solution(path, costs)
