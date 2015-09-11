@@ -36,10 +36,11 @@ class AStar:
 
     def start(self):
         ''' Start the A star algorithm '''
+        expansion_count = 0
         while not self.open_set.empty():
             current = self.open_set.get()
-            print "Expanding node {0}".format(current)
-
+           # print "Expanding node {0}".format(current)
+            expansion_count += 1
             # If we reached the goal, stop
             if current == self.world.goal:
                 break
@@ -78,8 +79,7 @@ class AStar:
                     new_dir = Direction().set_dir(Direction.vector(current, bash_cell))
                     self.facing[bash_cell] = new_dir
                     self.came_from[bash_cell] = current
-
-
+        print "Expanded {0} Nodes".format(expansion_count)
         self.trace_path()
 
     def draw_solution(self, path, costs):
@@ -124,6 +124,10 @@ class AStar:
         path.reverse()
         costs.reverse()
 
+<<<<<<< HEAD
 
+=======
+
+>>>>>>> b851bc9f58536f72ebc724ec5fe6f3103a5c34ea
 
         self.draw_solution(path, costs)
