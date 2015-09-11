@@ -123,11 +123,4 @@ class AStar:
 
         path.reverse()
         costs.reverse()
-
-<<<<<<< HEAD
-
-=======
-
->>>>>>> b851bc9f58536f72ebc724ec5fe6f3103a5c34ea
-
         self.draw_solution(path, costs)
