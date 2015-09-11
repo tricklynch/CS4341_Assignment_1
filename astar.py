@@ -1,6 +1,5 @@
 #!/usr/local/bin/python2.7
 
-import sys
 import world
 from agent import Agent
 from queue import CellQueue
@@ -51,7 +50,11 @@ class AStar:
                     + self.world.get_cell(next)
                 # Consider the adjacent node, 'next'...
                 if next not in self.cost_so_far or new_cost < self.cost_so_far[next]:
-                    evaluator = Agent(next, self.dir, self.heuristic_num)
+                    # TODO: Replace the 0 with a variable. This is the state of
+                    # the agent at the time of evaluation. The state is
+                    # dependant on the previous moves and at this time I am not
+                    # certain how to determine that.
+                    evaluator = Agent(next, self.dir, self.heuristic_num, 0)
                     self.cost_so_far[next] = new_cost
                     priority = new_cost + \
                         evaluator.estimate(self.world.goal)
@@ -84,15 +87,3 @@ class AStar:
             path.append(current)
         path.reverse()
         self.draw_solution(path)
-
-
-def main():
-    worldFile = "test3.world.txt"
-    if(len(sys.argv) == 2):
-        worldFile = sys.argv[1]
-    newWorld = world.World(worldFile)
-    astar = AStar(newWorld, 5)
-    astar.start()
-
-if __name__ == "__main__":
-    main()
