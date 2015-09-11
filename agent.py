@@ -31,6 +31,30 @@ class Agent:
             print str(err)
             sys.exit(1)
 
+    def get_possible_moves(self):
+        moves = self._moves_from_state()
+        moves = self._sanitize_moves(moves)
+        return moves
+
+    # Return a list of possible moves based off of the state
+    def _moves_from_state(self):
+        state = self.fsm.current_state
+        if state is 0:
+            return [forward, bash, turn]
+        elif state is 1:
+            return [forward]
+        elif states is 2:
+            return [forward, bash, turn]
+        elif states is 3:
+            return [forward, bash]
+        else:
+            # Do some error checking later maybe
+            return []
+
+    # Remove moves that are not possible based on position
+    def _sanitize_moves(self, moves):
+        pass
+
     def _heuristic_1(self, end):
         '''
         A heuristic of 0. A solution for a relaxed problem where the robot can
