@@ -64,7 +64,7 @@ class AStar:
 		    evaluator.dir.set_dir(evaluator.vector(current))
         self.trace_path()
 
-    def draw_solution(self, path):
+    def draw_solution(self, path, costs):
         ''' Draws the board and highlights the spaces that the agent took '''
         green = '\033[92m'
         reset = '\033[0m'
@@ -78,15 +78,31 @@ class AStar:
                 else:
                     print "{0}\t".format(cell),
         print "\n"
-        print path
+
+        print "Path\tCost"
+        for x in range(len(path)):
+            print "{0}\t{1}".format(path[x], costs[x])
+        
 
     def trace_path(self):
         '''Using the came_from dictionary, reconstruct the correct path to the goal '''
         current = self.world.goal
         path = [current]
-        while current != self.world.start:
-            current = self.came_from[current]
+        costs = [current]
+
+        while True:
             path.append(current)
-	    path.append(self.cost_so_far[current])
+            costs.append(self.cost_so_far[current])
+            current = self.came_from[current]
+
+            if current == self.world.start:
+                path.append(current)
+                costs.append(self.cost_so_far[current])
+                current = self.came_from[current]
+                break
+
         path.reverse()
-        self.draw_solution(path)
+        costs.reverse()
+
+        self.draw_solution(path, costs)
+
