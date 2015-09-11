@@ -100,9 +100,13 @@ class AStar:
                 costs.append(self.cost_so_far[current])
                 current = self.came_from[current]
                 break
+        path.pop(0)
+        costs.pop(0)
 
         path.reverse()
         costs.reverse()
+
+        
 
         self.draw_solution(path, costs)
 
