@@ -14,7 +14,7 @@ class World:
             self.gen_rand_world(height, width)
         else:
             self.load(filepath)
-        
+
 
     def __str__(self):
         return "\n".join(str(row) for row in self.rows)
@@ -122,5 +122,5 @@ class World:
             goal_y = random.randrange(height)
         self.start = (start_x, start_y)
         self.goal = (goal_x, goal_y)
-        self.rows[start_x][start_y] = Cell("S")
-        self.rows[goal_x][goal_y] = Cell("G")
+        self.rows[start_y][start_x] = Cell("S")
+        self.rows[goal_y][goal_x] = Cell("G")

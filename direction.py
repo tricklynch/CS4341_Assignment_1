@@ -7,8 +7,8 @@ class Direction():
     SOUTH = (0, 1)
     WEST = (-1, 0)
 
-    def __init__(self):
-        self.index = 1
+    def __init__(self, index=1):
+        self.index = index
         self._dirs = [self.WEST, self.NORTH, self.EAST, self.SOUTH]
 
     def count_turns_needed(self, otherdir):
@@ -37,4 +37,5 @@ class Direction():
 
     def set_dir(self, other_dir):
         if other_dir in self._dirs:
-	    self.index = self._dirs.index(other_dir)
+            self.index = self._dirs.index(other_dir)
+        return self

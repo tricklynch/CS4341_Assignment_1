@@ -9,13 +9,14 @@ class AStar:
 
     def __init__(self, world, heuristic_num):
         self.world = world
-        self.dir = Direction()
 
         self.heuristic_num = heuristic_num
 
         # Total cost to get to a given node
         self.cost_so_far = {}
         self.cost_so_far[self.world.start] = 0
+        self.facing = {}
+        self.facing[self.world.start] = Direction()
 
         # Openset is a priorityQueue where best options are first
         self.open_set = CellQueue()
@@ -46,11 +47,11 @@ class AStar:
             # For each adjacent cell
             for next in self.world.get_adjacent_cells(current):
                 # Tally total cost
-                evaluator = Agent(current, self.dir, self.heuristic_num, 0, self.world)
+                evaluator = Agent(current, self.facing[current], self.heuristic_num, 0, self.world)
                 new_cost = self.cost_so_far[current] \
                     + self.world.get_cell(next) + evaluator.turn(next)
-                print "The cost of moving the agent (facing {0}), from {1} to {2} is {3}".format(evaluator.dir.direction(), evaluator.pos, next, evaluator.turn(next))
-
+                new_dir = Direction().set_dir(Direction.vector(current, next))
+                
                 # Consider the adjacent node, 'next'...
                 if next not in self.cost_so_far or new_cost < self.cost_so_far[next]:
                     # TODO: Replace the 0 with a variable. This is the state of
@@ -61,11 +62,11 @@ class AStar:
                     priority = new_cost + \
                         evaluator.estimate(self.world.goal)
                     self.open_set.put(next, priority)
-                    self.dir.set_dir(Direction.vector(current, next))
+                    self.facing[next] = new_dir
                     self.came_from[next] = current
         self.trace_path()
 
-    def draw_solution(self, path):
+    def draw_solution(self, path, costs):
         ''' Draws the board and highlights the spaces that the agent took '''
         green = '\033[92m'
         reset = '\033[0m'
@@ -79,15 +80,30 @@ class AStar:
                 else:
                     print "{0}\t".format(cell),
         print "\n"
-        print path
+
+        print "Path\tCost"
+        for x in range(len(path)):
+            print "{0}\t{1}".format(path[x], costs[x])
+
 
     def trace_path(self):
         '''Using the came_from dictionary, reconstruct the correct path to the goal '''
         current = self.world.goal
         path = [current]
-        while current != self.world.start:
-            current = self.came_from[current]
+        costs = [current]
+
+        while True:
             path.append(current)
-	    path.append(self.cost_so_far[current])
+            costs.append(self.cost_so_far[current])
+            current = self.came_from[current]
+
+            if current == self.world.start:
+                path.append(current)
+                costs.append(self.cost_so_far[current])
+                current = self.came_from[current]
+                break
+
         path.reverse()
-        self.draw_solution(path)
+        costs.reverse()
+
+        self.draw_solution(path, costs)
