@@ -46,9 +46,10 @@ class AStar:
             # For each adjacent cell
             for next in self.world.get_adjacent_cells(current):
                 # Tally total cost
-                evaluator = Agent(next, self.dir, self.heuristic_num, 0, self.world)
+                evaluator = Agent(current, self.dir, self.heuristic_num, 0, self.world)
                 new_cost = self.cost_so_far[current] \
-                    + self.world.get_cell(next) + evaluator.turn(current)
+                    + self.world.get_cell(next) + evaluator.turn(next)
+                print "The cost of moving the agent (facing {0}), from {1} to {2} is {3}".format(evaluator.dir.direction(), evaluator.pos, next, evaluator.turn(next))
 
                 # Consider the adjacent node, 'next'...
                 if next not in self.cost_so_far or new_cost < self.cost_so_far[next]:
@@ -60,8 +61,8 @@ class AStar:
                     priority = new_cost + \
                         evaluator.estimate(self.world.goal)
                     self.open_set.put(next, priority)
+                    self.dir.set_dir(Direction.vector(current, next))
                     self.came_from[next] = current
-		    evaluator.dir.set_dir(evaluator.vector(current))
         self.trace_path()
 
     def draw_solution(self, path):

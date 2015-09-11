@@ -2,7 +2,6 @@
 
 import sys
 import math
-from cell import Cell
 from direction import Direction
 from fsm import FSM
 
@@ -19,7 +18,7 @@ class Agent:
         self.dir = direction
         self.heuristic_num = heuristic_num
         self.fsm = FSM(state)
-	self.world = world
+        self.world = world
 
     def estimate(self, end):
         ''' Estimate is a method that runs the appropriate heuristic '''
@@ -150,7 +149,7 @@ class Agent:
 
     def bash(self, pos):
         ''' Returns the cost of bashing over the current position'''
-        offset = self.vector(pos)
+        offset = Direction.vector(self.pos, pos)
         offset_pos = Cell.add_positions(self.pos, offset)
         two_offset_pos = Cell.add_positions(offset_pos, offset)
         bash_cost = 3
@@ -163,14 +162,10 @@ class Agent:
 
     def turn(self, pos):
         ''' Cost of turning to face the given position '''
-        single_turn_cost = math.ceil(self.world.get_cell(self.pos) / 3)
-	other_dir = self.vector(pos)
+        single_turn_cost = math.ceil(self.world.get_cell(self.pos) / 3.0)
+        other_dir = Direction.vector(self.pos, pos)
         turns_needed = self.dir.count_turns_needed(other_dir)
         return single_turn_cost * turns_needed
-
-    def vector(self, other):
-        ''' Returns the offset of a point compared to the agent's position '''
-        return Cell.sub_positions(other, self.pos)
 
     def direction(self):
         ''' Returns the direction of the agent '''
