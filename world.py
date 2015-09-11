@@ -5,14 +5,11 @@ import sys
 class World:
     '''The world structure is a class that is used to represent '''
 
-    def __init__(self, filepath, agent):
+    def __init__(self, filepath):
         self.rows = []
         self.start = ()
         self.goal = ()
         self.load(filepath)
-
-        agent.pos = self.start
-        self.agent = agent
 
     def __str__(self):
         return "\n".join(str(row) for row in self.rows)
