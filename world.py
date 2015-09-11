@@ -1,15 +1,20 @@
 #!/usr/local/bin/python2.7
 from cell import Cell
 import sys
+import random
 
 class World:
     '''The world structure is a class that is used to represent '''
 
-    def __init__(self, filepath):
+    def __init__(self, filepath=None, height=0, width=0):
         self.rows = []
         self.start = ()
         self.goal = ()
-        self.load(filepath)
+        if filepath is None:
+            self.gen_rand_world(height, width)
+        else:
+            self.load(filepath)
+        
 
     def __str__(self):
         return "\n".join(str(row) for row in self.rows)
@@ -98,3 +103,24 @@ class World:
             print('The file probably does not exist or something')
             sys.exit(1)
         return world_file
+
+    def gen_rand_world(self, height, width):
+        for i in range(height):
+            world_row = []
+            for j in range(width):
+                newCell = Cell(random.randrange(1, 10))
+                world_row.append(newCell)
+            self.rows.append(world_row)
+        start_x = 0
+        start_y = 0
+        goal_x = 0
+        goal_y = 0
+        while((start_x == goal_x) and (start_y == goal_y)):
+            start_x = random.randrange(width)
+            start_y = random.randrange(height)
+            goal_x = random.randrange(width)
+            goal_y = random.randrange(height)
+        self.start = (start_x, start_y)
+        self.goal = (goal_x, goal_y)
+        self.rows[start_x][start_y] = Cell("S")
+        self.rows[goal_x][goal_y] = Cell("G")
