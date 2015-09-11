@@ -14,7 +14,7 @@ class Agent:
     def __init__(self):
         self.pos = ()
         self.dir = Direction()
-        self.fsm = FSM()
+        self.fsm = FSM(0)
 
     def bash(self, pos):
         ''' Returns the cost of bashing over the current position'''
