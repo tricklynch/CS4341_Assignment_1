@@ -36,10 +36,11 @@ class AStar:
 
     def start(self):
         ''' Start the A star algorithm '''
+        expansion_count = 0
         while not self.open_set.empty():
             current = self.open_set.get()
-            print "Expanding node {0}".format(current)
-
+           # print "Expanding node {0}".format(current)
+            expansion_count += 1
             # If we reached the goal, stop
             if current == self.world.goal:
                 break
@@ -64,6 +65,7 @@ class AStar:
                     self.open_set.put(next, priority)
                     self.facing[next] = new_dir
                     self.came_from[next] = current
+        print "Expanded {0} Nodes".format(expansion_count)
         self.trace_path()
 
     def draw_solution(self, path, costs):
