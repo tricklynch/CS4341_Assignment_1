@@ -12,11 +12,11 @@ class Agent:
     project description which is in range(1, 7)
     '''
 
-    def __init__(self, pos, direction, heuristic_num):
+    def __init__(self, pos, direction, heuristic_num, state):
         self.pos = pos
         self.dir = direction
         self.heuristic_num = heuristic_num
-        self.fsm = FSM(0)
+        self.fsm = FSM(state)
 
     def estimate(self, end):
         ''' Estimate is a method that runs the appropriate heuristic '''
@@ -31,10 +31,13 @@ class Agent:
             print str(err)
             sys.exit(1)
 
-    def get_possible_moves(self):
+    def get_possible_moves(self, world):
         moves = self._moves_from_state()
-        moves = self._sanitize_moves(moves)
-        return moves
+        moves = self._sanitize_moves(moves, world)
+        moves_functions = []
+        for m in moves:
+            moves_functions.append(getattr(self, m))
+        return moves_functions
 
     # Return a list of possible moves based off of the state
     def _moves_from_state(self):
@@ -50,14 +53,41 @@ class Agent:
         else:
             # Do some error checking later maybe
             return []
-        moves_functions = []
-        for m in moves:
-            moves_functions.append(getattr(self, m))
-        return moves_functions
+        return moves
 
     # Remove moves that are not possible based on position
-    def _sanitize_moves(self, moves):
-        pass
+    def _sanitize_moves(self, moves, world):
+        length = world.length() - 1
+        width = world.width() - 1
+        if self.dir is 0:
+            if "forward" in moves:
+                if self.pos[0] == 0:
+                    moves.remove("forward")
+            if "bash" in moves:
+                if self.pos[0] <= 1:
+                    moves.remove("bash")
+        elif self.dir is 1:
+            if "forward" in moves:
+                if self.pos[1] == 0:
+                    moves.remove("forward")
+            if "bash" in moves:
+                if self.pos[1] <= 1:
+                    moves.remove("bash")
+        elif self.dir is 2:
+            if "forward" in moves:
+                if self.pos[0] == width:
+                    moves.remove("forward")
+            if "bash" in moves:
+                if self.pos[0] >= width - 1:
+                    moves.remove("bash")
+        elif self.dir is 3:
+            if "forward" in moves:
+                if self.pos[1] == length:
+                    moves.remove("forward")
+            if "bash" in moves:
+                if self.pos[1] >= length - 1:
+                    moves.remove("bash")
+        return moves
 
     def _heuristic_1(self, end):
         '''
