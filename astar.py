@@ -16,6 +16,8 @@ class AStar:
         self.cost_so_far = {}
         self.cost_so_far[self.world.start] = 0
         self.facing = {}
+        self.actions_taken = {}
+        self.actions_taken[self.world.start] = "START"
         self.facing[self.world.start] = Direction()
 
         # Openset is a priorityQueue where best options are first
@@ -62,6 +64,8 @@ class AStar:
                     #Save the direction the node is facing
                     new_dir = Direction().set_dir(Direction.vector(current, next))
                     self.facing[next] = new_dir
+                    turn_string = "turn," * evaluator.dir.count_turns_needed(current, next)
+                    self.actions_taken[next] = turn_string + "forward"
                     #Add the node to the path of traversed nodes
                     self.came_from[next] = current
 
@@ -78,6 +82,8 @@ class AStar:
                     self.open_set.put(bash_cell, f_score)
                     new_dir = Direction().set_dir(Direction.vector(current, bash_cell))
                     self.facing[bash_cell] = new_dir
+                    turn_string = "turn," * evaluator.dir.count_turns_needed(current, bash_cell)
+                    self.actions_taken[bash_cell] = turn_string + "bash,forward,"
                     self.came_from[bash_cell] = current
         print "Expanded {0} Nodes".format(expansion_count)
         self.trace_path()
@@ -99,7 +105,7 @@ class AStar:
 
         print "Path\tCost"
         for x in range(len(path)):
-            print "{0}\t{1}".format(path[x], costs[x])
+            print "{0}\t{1}, Actions: {2}".format(path[x], costs[x], self.actions_taken[path[x]])
 
 
     def trace_path(self):
@@ -123,4 +129,5 @@ class AStar:
 
         path.reverse()
         costs.reverse()
+
         self.draw_solution(path, costs)
