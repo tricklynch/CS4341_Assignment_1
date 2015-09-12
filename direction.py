@@ -17,7 +17,6 @@ class Direction():
 
     def count_turns_needed(self, from_pos, to_pos):
         ''' Returns the number of turns needed to face the given other direction '''
-        print "Current direction {0}, from_pos {1}, to_pos {2}".format(self._direction, from_pos, to_pos)
         vector = self.vector(from_pos, to_pos)
         if vector == self.direction():
             return 0
