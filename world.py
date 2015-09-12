@@ -134,12 +134,8 @@ class World:
         file = open(filename, "w")
         for i in range(self.length()):
             for j in range(self.width()):
-                if self.start == (i, j):
-                    file.write("S")
-                elif self.goal == (i, j):
-                    file.write("G")
-                else:
-                    file.write(str(self.rows[i][j]))
-                file.write("\t")
+                file.write(str(self.rows[i][j]))
+                if j != self.width() - 1:
+                    file.write("\t")
             file.write("\n")
         file.close()
