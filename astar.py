@@ -103,6 +103,7 @@ class AStar:
                 else:
                     print "{0}\t".format(cell),
         print "\n"
+        print "Depth = {0}".format(len(path))
       
     def trace_path(self):
         '''Using the came_from dictionary, reconstruct the correct path to the goal '''
