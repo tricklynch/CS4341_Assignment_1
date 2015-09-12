@@ -16,6 +16,9 @@ def main():
         "-s", "--size", type=int, help="Size of the random board to be generated"
     )
     parser.add_argument(
+        "-f", "--file", help="The file to output the world to"
+    )
+    parser.add_argument(
         "heuristic", type=int,
         help="The heuristic number to run (in range(1, 7))"
     )
@@ -26,6 +29,8 @@ def main():
         newWorld = World(height=args.size, width=args.size)
     else:
         newWorld = World(height=10, width=10)
+    if args.file:
+        newWorld.write_world(args.file)
     astar = AStar(newWorld, args.heuristic)
     astar.start()
 

@@ -129,3 +129,17 @@ class World:
         self.goal = (goal_x, goal_y)
         self.rows[start_y][start_x] = Cell("S")
         self.rows[goal_y][goal_x] = Cell("G")
+
+    def write_world(self, filename):
+        file = open(filename, "w")
+        for i in range(self.length()):
+            for j in range(self.width()):
+                if self.start == (i, j):
+                    file.write("S")
+                elif self.goal == (i, j):
+                    file.write("G")
+                else:
+                    file.write(str(self.rows[i][j]))
+                file.write("\t")
+            file.write("\n")
+        file.close()
