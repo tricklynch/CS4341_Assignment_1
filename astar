@@ -1,1 +1,9 @@
-python2.7 main.py 5
+if [ $# -eq 0 ]
+    then
+        python2.7 main.py -w test1.world.txt 5
+fi
+echo ""
+echo "You may run this program manually using the following command"
+echo "python2.7 main.py heuristic"
+echo "To learn more about the available options run"
+echo "python2.7 main.py -h"
