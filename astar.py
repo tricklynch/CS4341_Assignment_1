@@ -16,6 +16,8 @@ class AStar:
         self.cost_so_far = {}
         self.cost_so_far[self.world.start] = 0
         self.facing = {}
+        self.actions_taken = {}
+        self.actions_taken[self.world.start] = "START"
         self.facing[self.world.start] = Direction()
 
         # Openset is a priorityQueue where best options are first
@@ -62,6 +64,8 @@ class AStar:
                     #Save the direction the node is facing
                     new_dir = Direction().set_dir(Direction.vector(current, next))
                     self.facing[next] = new_dir
+                    turn_string = "turn," * evaluator.dir.count_turns_needed(current, next)
+                    self.actions_taken[next] = turn_string + "forward"
                     #Add the node to the path of traversed nodes
                     self.came_from[next] = current
 
@@ -78,6 +82,8 @@ class AStar:
                     self.open_set.put(bash_cell, f_score)
                     new_dir = Direction().set_dir(Direction.vector(current, bash_cell))
                     self.facing[bash_cell] = new_dir
+                    turn_string = "turn," * evaluator.dir.count_turns_needed(current, bash_cell)
+                    self.actions_taken[bash_cell] = turn_string + "bash,forward,"
                     self.came_from[bash_cell] = current
         score = 100 - self.cost_so_far[self.world.goal]
         self.trace_path()
@@ -98,7 +104,6 @@ class AStar:
                     print "{0}\t".format(cell),
         print "\n"
       
-
     def trace_path(self):
         '''Using the came_from dictionary, reconstruct the correct path to the goal '''
         current = self.world.goal
@@ -120,4 +125,5 @@ class AStar:
 
         path.reverse()
         costs.reverse()
+
         self.draw_solution(path, costs)
