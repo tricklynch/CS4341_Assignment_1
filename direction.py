@@ -11,38 +11,49 @@ class Direction():
 
     def __init__(self, index=1):
         self.index = index
-        self._dirs = [self.WEST, self.NORTH, self.EAST, self.SOUTH]
+        self._direction = self.NORTH
+        self._dirs = {self.WEST:-1, self.NORTH:-1, self.EAST:1, self.SOUTH:1}
 
 
     def count_turns_needed(self, from_pos, to_pos):
         ''' Returns the number of turns needed to face the given other direction '''
-        offset = Cell.sub_positions(to_pos, from_pos)
-        abs_offset = map(abs,offset)
-        max_val = max(abs_offset)
-        vector = tuple(map(div,offset,(max_val,max_val)))
-        dist = abs(self._dirs.index(vector) - self.index)
-        return 2 if dist >= 3 else dist
+        print "Current direction {0}, from_pos {1}, to_pos {2}".format(self._direction, from_pos, to_pos)
+        vector = self.vector(from_pos, to_pos)
+        if vector == self.direction():
+            return 0
 
-    def __getitem__(self, val):
-        return self._dirs[val % len(self._dirs)]
+        if vector == self.NORTH:
+            if self.direction() == self.SOUTH:
+                return 2
+            return 1
+        if vector == self.SOUTH:
+            if self.direction() == self.NORTH:
+                return 2
+            return 1
+        if vector == self.EAST:
+            if self.direction() == self.WEST:
+                return 2
+            return 1
+        if vector == self.WEST:
+            if self.direction() == self.EAST:
+                return 2
+            return 1
+        return 1
 
-    def turnLeft(self):
-        self.index -= 1
-        return self[self.index]
-
-    def turnRight(self):
-        self.index += 1
-        return self[self.index]
 
     def direction(self):
-        return self._dirs[self.index]
+        return self._direction
 
     @staticmethod
     def vector(first, other):
         ''' Returns the offset of a point compared to the agent's position '''
-        return Cell.sub_positions(other, first)
+        offset = Cell.sub_positions(other, first)
+        abs_offset = map(abs,offset)
+        max_val = max(abs_offset)
+        vector = tuple(map(div,offset,(max_val,max_val)))
+        return vector
 
     def set_dir(self, other_dir):
         if other_dir in self._dirs:
-            self.index = self._dirs.index(other_dir)
+            self._direction = other_dir
         return self
