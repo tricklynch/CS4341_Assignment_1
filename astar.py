@@ -26,13 +26,13 @@ class AStar:
         self.came_from = {}
         self.came_from[self.world.start] = None
 
-    def output():
+    def output(self, score, expanded):
         # The score of the path found
         # The number of actions required to reach the goal
         # The number of nodes expanded
         # The series of actions (e.g., forward, turn, forward, forward, forward,
         #   ...) taken to get to the goal, with each action separated by a newline
-        pass
+        print "Nodes Expanded = {0}\nScore = {1}".format(expanded, score); 
 
     def start(self):
         ''' Start the A star algorithm '''
@@ -79,8 +79,9 @@ class AStar:
                     new_dir = Direction().set_dir(Direction.vector(current, bash_cell))
                     self.facing[bash_cell] = new_dir
                     self.came_from[bash_cell] = current
-        print "Expanded {0} Nodes".format(expansion_count)
+        score = 100 - self.cost_so_far[self.world.goal]
         self.trace_path()
+        self.output(score, expansion_count)
 
     def draw_solution(self, path, costs):
         ''' Draws the board and highlights the spaces that the agent took '''
@@ -96,11 +97,7 @@ class AStar:
                 else:
                     print "{0}\t".format(cell),
         print "\n"
-
-        print "Path\tCost"
-        for x in range(len(path)):
-            print "{0}\t{1}".format(path[x], costs[x])
-
+      
 
     def trace_path(self):
         '''Using the came_from dictionary, reconstruct the correct path to the goal '''
